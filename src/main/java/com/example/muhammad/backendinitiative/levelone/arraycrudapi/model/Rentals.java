@@ -1,32 +1,38 @@
 package com.example.muhammad.backendinitiative.levelone.arraycrudapi.model;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 import java.util.Date;
 
+@Entity
 public class Rentals {
+    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private int userId;
-    private int movieId;
-    private Double price;
-    private Date rentDate;
+    @ManyToOne
+    private User user;
+    @ManyToOne
+    private Movie movie;
+    @CreationTimestamp
+    private LocalDateTime rentDate;
     private Date returnDate;
+    private boolean status;
 
     protected Rentals() {
     }
 
-    public Rentals(int userId, int movieId, Double price, Date rentDate, Date returnDate) {
-        this.userId = userId;
-        this.movieId = movieId;
-        this.price = price;
-        this.rentDate = rentDate;
-        this.returnDate = returnDate;
+    public Rentals(User user, Movie movie) {
+        this.user = user;
+        this.movie = movie;
     }
 
-    public Rentals(int id, int user, int movie, Double price, Date rentDate, Date returnDate) {
-        this.id = id;
-        this.userId = user;
-        this.movieId = movie;
-        this.price = price;
-        this.rentDate = rentDate;
+    public Rentals(User user, Movie movie,  Date returnDate) {
+        this.user = user;
+        this.movie = movie;
         this.returnDate = returnDate;
     }
 
@@ -38,36 +44,24 @@ public class Rentals {
         this.id = id;
     }
 
-    public int getUser() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUser(int user) {
-        this.userId = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public int getMovie() {
-        return movieId;
+    public Movie getMovie() {
+        return movie;
     }
 
-    public void setMovie(int movie) {
-        this.movieId = movie;
+    public void setMovie(Movie movie) {
+        this.movie = movie;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Date getRentDate() {
+    public LocalDateTime getRentDate() {
         return rentDate;
-    }
-
-    public void setRentDate(Date rentDate) {
-        this.rentDate = rentDate;
     }
 
     public Date getReturnDate() {
@@ -76,5 +70,13 @@ public class Rentals {
 
     public void setReturnDate(Date returnDate) {
         this.returnDate = returnDate;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }

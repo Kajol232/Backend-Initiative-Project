@@ -1,13 +1,25 @@
 package com.example.muhammad.backendinitiative.levelone.arraycrudapi.model;
 
+import com.example.muhammad.backendinitiative.levelone.arraycrudapi.security.ValidPassword;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+@Entity
 public class User {
+    @NotNull
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
     private Date dob;
     private String email;
     private String username;
+    @ValidPassword
     private String password;
 
     protected User() {
@@ -21,22 +33,10 @@ public class User {
         this.password = password;
     }
 
-    public User(int id, String name, Date dob, String email, String username, String password) {
-        this.id = id;
-        this.name = name;
-        this.dob = dob;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
-
     public int getId() {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

@@ -1,6 +1,7 @@
 package com.example.muhammad.backendinitiative.levelone.arraycrudapi.controller;
 
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Movie;
+import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Response;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.repository.MovieRepositories;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.service.serviceImplementation.MovieServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,13 @@ public class MovieController {
     @Autowired
     private MovieRepositories movieRepositories;
 
+    private Response response = new Response();
+
 
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/lists", produces = "application/json")
     public List<Movie> getAllMovies(){
-        return movieRepositories.getMovieList();
+        return (List<Movie>) movieRepositories.findAll();
 
     }
 
@@ -29,7 +32,7 @@ public class MovieController {
     @GetMapping(path = "/getMovies/{id}", produces = "application/json")
     public Movie getMovieById(@PathVariable(value = "id") int id){
 
-        return movieRepositories.getMovieById(id);
+        return movieRepositories.findById(id).get();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
@@ -54,6 +57,10 @@ public class MovieController {
     @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Object deleteMovie(@PathVariable("id") int id){
-        return movieRepositories.deleteMovie(id);
+        Movie m = movieRepositories.findById(id).get();
+        movieRepositories.delete(m);
+        response.setStatus("00");
+        response.setMessage("Movie deleted successfully");
+        return response;
     }
 }

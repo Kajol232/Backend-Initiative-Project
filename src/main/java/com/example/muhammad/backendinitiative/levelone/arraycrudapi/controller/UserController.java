@@ -1,6 +1,7 @@
 package com.example.muhammad.backendinitiative.levelone.arraycrudapi.controller;
 
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.RegisterUser;
+import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Response;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.User;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.repository.UserRepositories;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.service.serviceImplementation.UserServiceImpl;
@@ -18,16 +19,18 @@ public class UserController {
     @Autowired
     private UserRepositories userRepositories;
 
+    private Response response = new Response();
+
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/lists", produces = "application/json")
     public List<User> getAllUsers(){
-        return userRepositories.getUserList();
+        return (List<User>) userRepositories.findAll();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/getUser/{id}", produces = "application/json")
     public User getUserById(@PathVariable(value = "id") int id){
-        return userRepositories.getUserById(id);
+        return userRepositories.findById(id).get();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
@@ -51,7 +54,12 @@ public class UserController {
     @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/delete/{id}", produces = "application/json")
     public Object deleteUser(@PathVariable("id") int id){
-        return userRepositories.deleteUser(id);
+        User u = userRepositories.findById(id).get();
+        userRepositories.delete(u);
+        response.setStatus("00");
+        response.setMessage("User deleted successfully");
+
+        return response;
     }
 
 }

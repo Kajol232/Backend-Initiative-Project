@@ -9,6 +9,7 @@ public class RegisterUser {
     private Date dob;
     private String email;
     private String username;
+    @ValidPassword
     private String password;
     private String confirmPassword;
 

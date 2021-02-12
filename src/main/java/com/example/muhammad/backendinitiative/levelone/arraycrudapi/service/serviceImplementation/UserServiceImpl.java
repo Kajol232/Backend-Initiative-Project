@@ -33,7 +33,9 @@ public class UserServiceImpl implements UserService {
 
         }else{
             User u = new User(user.getName(),user.getDob(),user.getEmail(), user.getUsername(), user.getPassword());
-            response = userRepositories.addUser(u);
+            userRepositories.save(u);
+            response.setStatus("00");
+            response.setMessage("User added successfully");
 
         }
 
@@ -42,13 +44,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object editUser(int id, User user) {
-        User u = userRepositories.getUserById(id);
+        User u = userRepositories.findById(id).get();
         if(user != null){
             u.setName(user.getName());
             u.setDob(user.getDob());
             u.setEmail(user.getEmail());
             u.setUsername(user.getUsername());
-            response = userRepositories.editUser(id, u);
+            userRepositories.save(u);
+            response.setStatus("00");
+            response.setMessage("User details updated successfully");
         }else {
             response.setStatus("403");
             response.setMessage("User does not exist");

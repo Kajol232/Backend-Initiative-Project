@@ -2,6 +2,7 @@ package com.example.muhammad.backendinitiative.levelone.arraycrudapi.controller;
 
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Movie;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Rentals;
+import com.example.muhammad.backendinitiative.levelone.arraycrudapi.model.Response;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.repository.RentalRepositories;
 import com.example.muhammad.backendinitiative.levelone.arraycrudapi.service.serviceImplementation.RentalServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,19 @@ public class RentalController {
     @Autowired
     private RentalRepositories rentalRepositories;
 
+    private Response response = new Response();
+
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "lists", produces = "application/json")
     public List<Rentals> getAllRentals(){
-        return rentalRepositories.getRentalsList();
+        return (List<Rentals>) rentalRepositories.findAll();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping(path = "/getRental/{id}", produces = "application/json")
     public Rentals getRentalById(@PathVariable(value = "id") int id){
-        return rentalRepositories.getRentalById(id);
+
+        return rentalRepositories.findById(id).get();
     }
 
     @CrossOrigin(origins = "http://localhost:8080")
@@ -54,7 +58,11 @@ public class RentalController {
     @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping(path = "/delete/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Object deleteRental(@PathVariable("id") int id) {
-        return rentalRepositories.deleteRental(id);
+        Rentals r = rentalRepositories.findById(id).get();
+        rentalRepositories.delete(r);
+        response.setStatus("00");
+        response.setMessage("Rental deleted");
+        return response;
     }
 
 }

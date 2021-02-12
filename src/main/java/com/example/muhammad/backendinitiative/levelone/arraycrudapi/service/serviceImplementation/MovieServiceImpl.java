@@ -20,7 +20,9 @@ public class MovieServiceImpl implements MovieService {
             response.setStatus("05");
             response.setMessage("Invalid movie details");
         }else {
-            response = movieRepositories.addNewMovie(movie);
+            movieRepositories.save(movie);
+            response.setStatus("00");
+            response.setMessage("Movie saved successfully");
         }
 
         return response;
@@ -28,11 +30,14 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Object editMovie(int id, Movie movie) {
-        Movie m = movieRepositories.getMovieById(id);
+        Movie m = movieRepositories.findById(id).get();
         if (movie != null){
             m.setTitle(movie.getTitle());
-            m.setYear(m.getYear());
-            response = movieRepositories.editMovie(id, m);
+            m.setYear(movie.getYear());
+            m.setPrice(movie.getPrice());
+            movieRepositories.save(m);
+            response.setStatus("00");
+            response.setMessage("Movie details updated successfully");
         }else{
             response.setStatus("403");
             response.setMessage("Movie does not exist");
